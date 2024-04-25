@@ -1,0 +1,15 @@
+# ---------------------------------------------
+# Sliver HTTP C2 Traffic Detection Configuration
+
+# Enable the Detect Sliver HTTP C2 Traffic module
+SliverHttpTraffic::enable T 
+
+# Specify allowed sensor IPs for processing
+SliverHttpTraffic::allow_sensor 192.168.199.32
+
+# Specifies a set of encoder IDs for matching
+SliverHttpTraffic::encoder_ids 13,22,31,43,45,49,64,65,92
+
+# Specify the length of the cookie for the first response
+SliverHttpTraffic::cookie_len 32
+# ---------------------------------------------

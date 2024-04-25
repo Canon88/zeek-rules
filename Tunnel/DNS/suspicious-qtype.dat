@@ -1,0 +1,16 @@
+# ---------------------------------------------
+# Suspicious DNS Traffic Detection Configuration
+
+# Enable the Suspicious DNS Traffic Detection module
+# Setting this option to `T` (true) turns on the detection logic.
+SuspiciousDNSTraffic::enable T
+
+# Define the DNS query types to monitor
+# These types are commonly used in DNS tunneling and other suspicious DNS activities.
+SuspiciousDNSTraffic::qtype_names MX,NULL,TXT,CNAME
+
+# Define second-level domains to be excluded from monitoring
+# Queries to these domains will be ignored in the detection process.
+SuspiciousDNSTraffic::second_level_domains baidu.com,google.com
+
+# ---------------------------------------------
