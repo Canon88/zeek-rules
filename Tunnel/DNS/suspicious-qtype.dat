@@ -9,6 +9,15 @@ SuspiciousDNSTraffic::enable T
 # These types are commonly used in DNS tunneling and other suspicious DNS activities.
 SuspiciousDNSTraffic::qtype_names MX,NULL,TXT,CNAME
 
+# Define the DNS domain prefix max length, default 30 bytes.
+SuspiciousDNSTraffic::threshold_length 30
+
+# Define statistics window size, default 5 seconds.
+SuspiciousDNSTraffic::threshold_window 5
+
+# Define IOC expire time, default 300 seconds.
+SuspiciousDNSTraffic::ioc_expire 300
+
 # Define second-level domains to be excluded from monitoring
 # Queries to these domains will be ignored in the detection process.
 SuspiciousDNSTraffic::second_level_domains baidu.com,google.com
