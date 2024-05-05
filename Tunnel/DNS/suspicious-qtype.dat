@@ -5,6 +5,10 @@
 # Setting this option to `T` (true) turns on the detection logic.
 SuspiciousDNSTraffic::enable T
 
+# Enable private DNS traffic filtering
+# Setting this option to `T` (true) activates the traffic filtering logic.
+SuspiciousDNSTraffic::filter_private_dns T
+
 # Define the DNS query types to monitor
 # These types are commonly used in DNS tunneling and other suspicious DNS activities.
 SuspiciousDNSTraffic::qtype_names MX,NULL,TXT,CNAME

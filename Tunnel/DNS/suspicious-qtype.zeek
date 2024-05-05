@@ -6,6 +6,9 @@ export {
 	# Enable or disable the detection feature.
 	option enable: bool = T;
 
+	# Enable or disable the filtering of private DNS traffic.
+	option filter_private_dns: bool = F;
+
 	# Set of DNS query types to be monitored for suspicious activities.
 	option qtype_names: set[string] = { "MX", "NULL", "TXT", "CNAME" };
 
@@ -48,6 +51,10 @@ event dns_request(c: connection, msg: dns_msg, query: string, qtype: count,
 	if ( ! enable )
 		return;
 
+	# Filter out private DNS traffic.
+	if ( ( filter_private_dns ) && ( Site::is_private_addr(c$id$resp_h )) )
+		return;
+
 	# Filter out queries not in the specified types or to local domains.
 	if ( ( c$dns$qtype_name !in qtype_names ) || ( Site::is_local_name(query) ) )
 		return;
@@ -66,11 +73,11 @@ event dns_request(c: connection, msg: dns_msg, query: string, qtype: count,
 		return;
 
 	# Prepare data for statistical analysis.
-	local val_str: string = fmt("%s####%s####%s####%s####%s####%s####%s", c$uid,
+	local dns_query_details: string = fmt("%s####%s####%s####%s####%s####%s####%s", c$uid,
 	    c$id$orig_h, c$id$resp_h, prefix, sld, c$orig$size,
 	    c$dns$qtype_name);
 	# Register the query for further observation.
-	SumStats::observe("suspicious_dns_qtype_event", [ $str=sld ], [ $str=val_str ]);
+	SumStats::observe("suspicious_dns_qtype_event", [ $str=sld ], [ $str=dns_query_details ]);
 	}
 
 # Initialization event for DNS request analysis.
