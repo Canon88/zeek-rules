@@ -37,6 +37,10 @@ event dns_request(c: connection, msg: dns_msg, query: string, qtype: count, qcla
 	if ( ! oversize_enable )
 		return;
 
+    # Return early if the domain is trusted or local
+    if (c$dns$is_trusted_domain || c$dns$is_local_domain)
+        return;
+
 	# Filter out private DNS traffic if enabled
 	if ( filter_private_dns && Site::is_private_addr(c$id$resp_h) )
 		return;
