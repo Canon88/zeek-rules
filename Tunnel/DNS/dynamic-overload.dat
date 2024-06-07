@@ -1,0 +1,29 @@
+# ---------------------------------------------
+# Suspicious DNS Traffic Detection Configuration
+
+# Enable the Suspicious DNS Traffic Detection module
+# Setting this option to `T` (true) turns on the detection logic.
+SuspiciousDNSTraffic::enable T
+
+# Enable or disable the filtering of private DNS traffic
+# Setting this option to `T` (true) will filter out DNS traffic to private addresses.
+SuspiciousDNSTraffic::ignore_private_dns F
+
+# List of trusted queries to ignore
+# Queries matching these values will be considered safe and not monitored.
+SuspiciousDNSTraffic::ignore_querys canon88.github.io
+
+# List of trusted host subdomains to ignore
+# Subdomains matching these names will be considered safe and not monitored.
+SuspiciousDNSTraffic::ignore_subdomains canon88
+
+# Define the DNS query types to ignore
+# These types will be ignored in the detection of suspicious activities.
+SuspiciousDNSTraffic::ignore_qtypes HTTPS,AAAA,PTR
+
+# Set the deviation threshold for identifying suspicious DNS payloads
+SuspiciousDNSTraffic::deviation_threshold 2.0
+
+# Set the multiplier threshold for identifying suspicious DNS payloads
+SuspiciousDNSTraffic::multiplier_threshold 3.0
+# ---------------------------------------------

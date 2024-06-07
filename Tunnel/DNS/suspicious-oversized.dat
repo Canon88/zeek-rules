@@ -1,0 +1,28 @@
+# ---------------------------------------------
+# Suspicious DNS Traffic Detection Configuration
+
+# Enable the Suspicious DNS Traffic Detection module
+# Setting this option to `T` (true) turns on the detection logic.
+SuspiciousDNSTraffic::oversize_enable T
+
+# Enable or disable the filtering of private DNS traffic
+# Setting this option to `T` (true) will filter out DNS traffic to private addresses.
+SuspiciousDNSTraffic::filter_private_dns F
+
+# List of trusted queries to ignore
+# Queries matching these domains will be considered safe and not monitored.
+SuspiciousDNSTraffic::oversize_ignore_querys canon88.github.io
+
+# List of trusted host subdomains to ignore
+# Subdomains matching these names will be considered safe and not monitored.
+SuspiciousDNSTraffic::oversize_ignore_subdomains canon88
+
+# Define the DNS query types to ignore
+# These types will be ignored in the detection of suspicious activities.
+SuspiciousDNSTraffic::oversize_ignore_qtypes AAAA
+
+# Define the DNS domain prefix max length
+# Domain names with prefixes longer than this value will be considered suspicious.
+SuspiciousDNSTraffic::oversize_subdomain 50
+
+# ---------------------------------------------
