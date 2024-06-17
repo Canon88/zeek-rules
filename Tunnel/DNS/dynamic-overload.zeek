@@ -43,6 +43,15 @@ export {
     # Set of trusted subdomains to be ignored
     option ignore_subdomains: set[string] = { };
 
+    # Set of trusted domains to be ignored
+    option ignore_domains: set[string] = { };
+
+    # Set of trusted top-level domains to be ignored
+    option ignore_tlds: set[string] = { };
+    
+    # Set of regular expressions for top-level domains to be ignored
+    option ignore_tlds_regex: pattern = /^[0-9]{1,2}$/;
+
     # Set the deviation threshold for identifying suspicious DNS payloads
     option deviation_threshold: double = 3.0; # Customize this threshold as needed
 
@@ -78,9 +87,17 @@ event dns_message(c: connection, is_orig: bool, msg: dns_msg, len: count) &prior
     # Ignore trusted queries
     if (c$dns$query in ignore_querys)
         return;
-
-    # Ignore trusted subdomains
+    
+    #  Ignore trusted subdomains
     if (c$dns$subdomain in ignore_subdomains)
+        return;
+
+    # Ignore trusted domains
+    if (c$dns$domain in ignore_domains)
+        return;
+
+    # Ignore trusted top-level domains
+    if ( (c$dns$tld in ignore_tlds) || (ignore_tlds_regex in c$dns$tld) )
         return;
     
     # Store the payload size in the DNS::Info record
@@ -125,6 +142,9 @@ event dns_message(c: connection, is_orig: bool, msg: dns_msg, len: count) &prior
                 c$dns$alert_reason = alert_reason;
             }
         }
+
+        # c$dns$payload_prev_avg = avg;
+        # c$dns$payload_prev_sd = sd;
     }
 }
 
@@ -138,7 +158,7 @@ event zeek_init() {
         $name = "dns_payload_len.std_dev",
         $epoch = baseline_interval,
         $reducers = set(r_std_dev),
-        $epoch_result(ts: time, key: SumStats::Key, result: SumStats::Result) = {
+        $epoch_result(ts: time, key: SumStats::Key, result: SumStats::Result) = { 
             local current_avg = double_to_count(result["dns_payload_len"]$average);
             local current_std_dev = double_to_count(result["dns_payload_len"]$std_dev);
 

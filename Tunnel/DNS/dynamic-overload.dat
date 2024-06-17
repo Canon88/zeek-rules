@@ -17,6 +17,18 @@ SuspiciousDNSTraffic::ignore_querys canon88.github.io
 # Subdomains matching these names will be considered safe and not monitored.
 SuspiciousDNSTraffic::ignore_subdomains canon88
 
+# List of trusted domains to ignore
+# Queries matching these values will be considered safe and not monitored.
+SuspiciousDNSTraffic::ignore_domains github.io
+
+# List of trusted TLDs to ignore
+# Queries matching these values will be considered safe and not monitored.
+SuspiciousDNSTraffic::ignore_tlds io
+
+# List of trusted TLD patterns to ignore
+# Queries matching these regular expression patterns will be considered safe and not monitored.
+SuspiciousDNSTraffic::ignore_tlds_regex /^[0-9]{1,2}$/
+
 # Define the DNS query types to ignore
 # These types will be ignored in the detection of suspicious activities.
 SuspiciousDNSTraffic::ignore_qtypes HTTPS,AAAA,PTR
