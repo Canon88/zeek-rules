@@ -89,15 +89,15 @@ event dns_message(c: connection, is_orig: bool, msg: dns_msg, len: count) &prior
         return;
     
     #  Ignore trusted subdomains
-    if (c$dns$subdomain in ignore_subdomains)
+    if ( (c$dns?$subdomain) && (c$dns$subdomain in ignore_subdomains) )
         return;
 
     # Ignore trusted domains
-    if (c$dns$domain in ignore_domains)
+    if ( (c$dns?$domain) && (c$dns$domain in ignore_domains) )
         return;
 
     # Ignore trusted top-level domains
-    if ( (c$dns$tld in ignore_tlds) || (ignore_tlds_regex in c$dns$tld) )
+    if ( (c$dns?$tld) && ( (c$dns$tld in ignore_tlds) || (ignore_tlds_regex in c$dns$tld) ) )
         return;
     
     # Store the payload size in the DNS::Info record

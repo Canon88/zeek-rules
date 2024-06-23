@@ -37,6 +37,9 @@ event dns_request(c: connection, msg: dns_msg, query: string, qtype: count, qcla
 	if ( ! oversize_enable )
 		return;
 
+	if ( ! c$dns?$subdomain )
+		return;
+
     # Return early if the domain is trusted or local
     if (c$dns$is_trusted_domain || c$dns$is_local_domain)
         return;
