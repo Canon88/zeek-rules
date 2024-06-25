@@ -72,8 +72,8 @@ event dns_message(c: connection, is_orig: bool, msg: dns_msg, len: count) &prior
     if ( ! c?$dns || ! c$dns?$query || is_orig)
         return;
 
-    # Return early if the domain is trusted or local
-    if (c$dns$is_trusted_domain || c$dns$is_local_domain)
+    # Return early if the domain is local
+    if (c$dns$is_local_domain)
         return;
 
     # Filter out private DNS traffic if enabled

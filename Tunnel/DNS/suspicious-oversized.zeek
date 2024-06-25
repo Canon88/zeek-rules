@@ -33,6 +33,9 @@ export {
 
 # Event handler for DNS requests
 event dns_request(c: connection, msg: dns_msg, query: string, qtype: count, qclass: count) &priority=-10 {
+    if ( ! c?$dns )
+        return;
+	
 	# Return early if detection is disabled
 	if ( ! oversize_enable )
 		return;
