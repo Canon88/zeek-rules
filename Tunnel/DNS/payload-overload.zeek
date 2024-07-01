@@ -27,49 +27,21 @@ export {
 
     # Define a table to store the data
     option data: table[string] of Stats;
-
-    # Option to enable or disable the detection feature
-    option enable: bool = T;
-
-    # Option to enable or disable the filtering of private DNS traffic
-    option ignore_private_dns: bool = F;
-
-    # Set of DNS query types to be ignored in the detection of suspicious activities
-    option ignore_qtypes: set[string] = { };
-
-    # Set of trusted DNS queries to be ignored
-    option ignore_querys: set[string] = { };
-
-    # Set of trusted subdomains to be ignored
-    option ignore_subdomains: set[string] = { };
-
-    # Set of trusted domains to be ignored
-    option ignore_domains: set[string] = { };
-
-    # Set of trusted top-level domains to be ignored
-    option ignore_tlds: set[string] = { };
-    
-    # Set of regular expressions for top-level domains to be ignored
-    option ignore_tlds_regex: pattern = /^[0-9]{1,2}$/;
-
-    # Set the deviation threshold for identifying suspicious DNS payloads
-    option deviation_threshold: double = 3.0; # Customize this threshold as needed
-
-    # Set the multiplier threshold for identifying suspicious DNS payloads
-    option multiplier_threshold: double = 2.0; # Customize this threshold as needed
-
-    # File path to additional detection rules
-    redef Config::config_files += { "/usr/local/zeek/share/zeek/site/rules/Tunnel/DNS/dynamic-overload.dat" };
 }
 
 # Event handler for DNS messages
 event dns_message(c: connection, is_orig: bool, msg: dns_msg, len: count) &priority=-10 {
     # Return early if detection is disabled
-    if (!enable)
+    if (! payload_overload_enable)
         return;
     
     # Return early if the DNS query is not present or if the connection is from the originator
     if ( ! c?$dns || ! c$dns?$query || is_orig)
+        return;
+
+    # Ignore DNS over UDP
+    local proto = get_port_transport_proto(c$id$orig_p);
+    if ("tcp" == cat(proto))
         return;
 
     # Return early if the domain is local

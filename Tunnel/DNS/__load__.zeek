@@ -1,2 +1,3 @@
-@load ./suspicious-oversized
-@load ./dynamic-overload
+@load ./main
+@load ./subdomain-overload
+@load ./payload-overload
